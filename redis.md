@@ -52,3 +52,35 @@ Time complexity of o(n)
 ## Hashing
 Consistent hashing
 o(1) - 
+
+## Transactions
+* Most Redis commands are blocking as they are atomic.
+* UNLINK and some other commands are async
+* ACID - Atomicity, Consistency, Isolation, Durability
+* Example is a direct deposit (SELECT, UPDATE, UPDATE) 
+* Multiple parts of a single transaction.
+
+## Redis and Transactions
+* Serialized and executed sequentially
+* Another connection cannot make a change during the execution of a transaction
+* All or none
+* `MULTI` - start of transaction
+* `EXEC` - Execute queued commands
+* `DISCARD` - throw away
+
+### What happens?
+* Invalid syntax - will drop everything. 
+* Data type - Will continue 
+* System errors - Safe guards in place
+
+*No rollback*
+
+### Nested transactions
+* Commands queued and applied in a single operation.
+
+### Optimistic Concurrency Control
+* Notify if an object has changed
+* keyspace notifications
+* `WATCH` key (cumulative and local to client)
+* `UNWATCH` all watch keys
+* All keys unwatched after EXEC
